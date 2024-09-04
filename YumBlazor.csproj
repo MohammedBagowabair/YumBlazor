@@ -16,7 +16,6 @@
 
   <ItemGroup>
     <Folder Include="ViewModels\" />
-    <Folder Include="Repository\IRepository\" />
     <Folder Include="Services\Extensions\" />
     <Folder Include="wwwroot\js\" />
   </ItemGroup>
