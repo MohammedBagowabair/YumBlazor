@@ -2,7 +2,7 @@
 
 namespace YumBlazor.Repository.IRepository
 {
-    public interface ICategory
+    public interface ICategoryRepository
     {
         public Category Create(Category obj);
         public Category Update(Category obj);
