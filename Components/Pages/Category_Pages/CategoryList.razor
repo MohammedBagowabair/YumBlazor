@@ -68,10 +68,6 @@ else
     private IEnumerable<Category> Categories { get; set; } = new List<Category>();
     private int DeleteCategoryID { get; set; } = 0;
 
-    protected override async Task OnInitializedAsync()
-    {
-
-    }
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
@@ -97,6 +93,7 @@ else
     {
         IsProcessing = true;
         await _JS.InvokeVoidAsync("HideConfirmationModal");
+
         if (isConfirmed && DeleteCategoryID != 0)
         {
             var result = await _categoryRepository.DeleteAsync(DeleteCategoryID);
