@@ -84,7 +84,10 @@ else
 
     private IEnumerable<Product> Products = new List<Product>();
     private IEnumerable<Category> Categories = new List<Category>();
+    private IEnumerable<Product> FilteredProducts = new List<Product>();
     private bool IsProcessing { get; set; } = true;
+    private int _selectedCategoryId = 0;
+    private string _searchText = "";
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -97,5 +100,29 @@ else
     {
         Products = await _productRepository.GetAllAsync();
         Categories = await _categoryRepository.GetAllAsync();
+        FilterProducts(0);
+    }
+
+    private void FilterProducts(int categoryId)
+    {
+        if (categoryId == 0)
+        {
+            FilteredProducts = Products;
+            _selectedCategoryId = categoryId;
+        }
+    }
+
+    private void FilterProductByName(string newValueOfSearchText)
+    {
+        if (string.IsNullOrWhiteSpace(newValueOfSearchText))
+        {
+            FilteredProducts = Products;
+        }
+        else
+        {
+            FilteredProducts = Products
+            .Where(u => u.Name.Contains(newValueOfSearchText, StringComparison.InvariantCultureIgnoreCase)).ToList();
+        }
+        _searchText = newValueOfSearchText;
     }
 }
