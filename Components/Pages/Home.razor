@@ -18,6 +18,7 @@ else
 
                 <div class="d-flex align-items-center" style="width: 100%;">
                     <input type="text" class="form-control rounded-pill"
+                           @bind:event="oninput" @bind:get="_searchText" @bind:set="FilterProductByName"
                            placeholder="Search for Food Items!"
                            style="width: 100%; padding: 20px;">
                     <span style="position: relative; left: -43px;"><i class="bi bi-search"></i></span>
@@ -38,7 +39,7 @@ else
                 }
             </ul>
             <div class="row mt-4 mx-1">
-                @foreach (var pro in Products)
+                @foreach (var pro in FilteredProducts)
                 {
                     <div class="col-12 col-md-6 col-lg-4 pe-3 mb-5">
                         <div class="card">
@@ -66,7 +67,7 @@ else
                             </div>
                             <div class="card-body">
                                 <h5 class="card-title text-center lead text-success">@pro.Name</h5>
-                                <p class="card-text mt-2">@((MarkupString) @pro.Description)</p>
+                                <p class="card-text mt-2">@((MarkupString)pro.Description)</p>
                                 <h4 class="text-center">
                                     <i class="bi bi-cart3 btn btn-success text-right  px-5" style="width:300px"> Add to cart</i>
                                 </h4>
@@ -87,13 +88,16 @@ else
     private IEnumerable<Product> FilteredProducts = new List<Product>();
     private bool IsProcessing { get; set; } = true;
     private int _selectedCategoryId = 0;
-    private string _searchText = "";
+    private string? _searchText = "";
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        await LoadProducts();
-        IsProcessing = false;
-        StateHasChanged();
+        if (firstRender)
+        {
+            await LoadProducts();
+            IsProcessing = false;
+            StateHasChanged();
+        }
     }
 
     private async Task LoadProducts()
@@ -112,7 +116,7 @@ else
         }
     }
 
-    private void FilterProductByName(string newValueOfSearchText)
+    private void FilterProductByName(string? newValueOfSearchText)
     {
         if (string.IsNullOrWhiteSpace(newValueOfSearchText))
         {
@@ -120,8 +124,7 @@ else
         }
         else
         {
-            FilteredProducts = Products
-            .Where(u => u.Name.Contains(newValueOfSearchText, StringComparison.InvariantCultureIgnoreCase)).ToList();
+            FilteredProducts = Products.Where(u => u.Name.Contains(newValueOfSearchText, StringComparison.InvariantCultureIgnoreCase)).ToList();
         }
         _searchText = newValueOfSearchText;
     }
