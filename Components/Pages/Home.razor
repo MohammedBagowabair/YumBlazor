@@ -2,7 +2,7 @@
 @using System.Globalization
 @inject IProductRepository _productRepository
 <PageTitle>Home</PageTitle>
- @if (IsProcessing)
+@if (IsProcessing)
 {
     <div class="position-absolute w-100 vh-100 d-flex flex-column align-items-center bg-white justify-content-center">
         <img src="/images/loading.gif" alt="loading" />
@@ -16,8 +16,8 @@ else
 
                 <div class="d-flex align-items-center" style="width: 100%;">
                     <input type="text" class="form-control rounded-pill"
-                    placeholder="Search for Food Items!"
-                    style="width: 100%; padding: 20px;">
+                           placeholder="Search for Food Items!"
+                           style="width: 100%; padding: 20px;">
                     <span style="position: relative; left: -43px;"><i class="bi bi-search"></i></span>
                 </div>
             </div>
@@ -36,21 +36,21 @@ else
                 </li>
             </ul>
             <div class="row mt-4 mx-1">
-                @foreach(var pro in Products)
+                @foreach (var pro in Products)
                 {
-                <div class="col-12 col-md-6 col-lg-4 pe-3 mb-5">
-                    <div class="card">
-                        <div class="mt-3 mb-2 row">
-                            <div class="col-6 px-3">
+                    <div class="col-12 col-md-6 col-lg-4 pe-3 mb-5">
+                        <div class="card">
+                            <div class="mt-3 mb-2 row">
+                                <div class="col-6 px-3">
                                     @if (string.IsNullOrEmpty(pro.SpecialTag))
                                     {
-                                    <i class="bi bi-star btn btn-outline-success disabled">@pro.SpecialTag</i>
+                                        <i class="bi bi-star btn btn-outline-success disabled">@pro.SpecialTag</i>
                                     }
-                            </div>
-                            <div class="col-6 text-end px-3">
+                                </div>
+                                <div class="col-6 text-end text-danger px-3 h3">
                                     @pro.Price.ToString("C", CultureInfo.GetCultureInfo("en-us"))
+                                </div>
                             </div>
-                        </div>
                             <div class="text-center">
                                 @if (!string.IsNullOrEmpty(pro.ImageUrl))
                                 {
@@ -62,22 +62,23 @@ else
                                 }
 
                             </div>
-                        <div class="card-body">
-                            <h5 class="card-title text-center lead text-success">@pro.Name</h5>
-                            <h4 class="text-center">
-                                <i class="bi bi-cart3 btn btn-success text-right  px-5" style="width:300px"> Add to cart</i>
-                            </h4>
-                            <p class="card-text mt-2">@((MarkupString) @pro.Description)</p>
+                            <div class="card-body">
+                                <h5 class="card-title text-center lead text-success">@pro.Name</h5>
+                                <p class="card-text mt-2">@((MarkupString)@pro.Description)</p>
+                                <h4 class="text-center">
+                                    <i class="bi bi-cart3 btn btn-success text-right  px-5" style="width:300px"> Add to cart</i>
+                                </h4>
 
+
+                            </div>
                         </div>
                     </div>
-                </div>
                 }
             </div>
         </div>
     </div>
 }
-@code{
+@code {
 
     private IEnumerable<Product> Products = new List<Product>();
     private bool IsProcessing { get; set; } = true;
