@@ -8,6 +8,7 @@
 @using YumBlazor.Data
 @using YumBlazor.Utility
 
+@inject RoleManager<IdentityRole> RoleManager
 @inject UserManager<ApplicationUser> UserManager
 @inject IUserStore<ApplicationUser> UserStore
 @inject SignInManager<ApplicationUser> SignInManager
@@ -98,6 +99,20 @@
         }
 
         Logger.LogInformation("User created a new account with password.");
+
+        if (!await RoleManager.RoleExistsAsync(SD.Role_Customer))
+        {
+            await RoleManager.CreateAsync(new IdentityRole(SD.Role_Admin));
+            await RoleManager.CreateAsync(new IdentityRole(SD.Role_Customer));
+        }
+        if (Input.Role is not null)
+        {
+            await UserManager.AddToRoleAsync(user, Input.Role);
+        }
+        else
+        {
+            await UserManager.AddToRoleAsync(user, SD.Role_Customer);
+        }
 
         var userId = await UserManager.GetUserIdAsync(user);
         var code = await UserManager.GenerateEmailConfirmationTokenAsync(user);
