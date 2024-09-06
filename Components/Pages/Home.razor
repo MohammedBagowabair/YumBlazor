@@ -29,12 +29,12 @@ else
         <div class="content px-4 m-2">
             <ul class="nav nav-underline justify-content-center mb-2">
                 <li class="nav-item">
-                    <span class="nav-link" href="#" style="cursor: pointer">All</span>
+                    <span @onclick="()=>FilterProducts(0)" class="nav-link" href="#" style="cursor: pointer">All</span>
                 </li>
                 @foreach (var category in Categories)
                 {
                     <li class="nav-item">
-                        <span class="nav-link" href="#" style="cursor: pointer">@category.Name</span>
+                        <span @onclick="()=>FilterProducts(category.Id)"  class="nav-link" href="#" style="cursor: pointer">@category.Name</span>
                     </li>
                 }
             </ul>
@@ -88,7 +88,7 @@ else
     private IEnumerable<Product> FilteredProducts = new List<Product>();
     private bool IsProcessing { get; set; } = true;
     private int _selectedCategoryId = 0;
-    private string? _searchText = "";
+    private string _searchText = "";
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -113,10 +113,17 @@ else
         {
             FilteredProducts = Products;
             _selectedCategoryId = categoryId;
+            return;
+        }
+        else
+        {
+            FilteredProducts = Products.Where(u => u.CategoryId == categoryId).ToList();
+            _selectedCategoryId = categoryId;
+            _searchText = String.Empty;
         }
     }
 
-    private void FilterProductByName(string? newValueOfSearchText)
+    private void FilterProductByName(string newValueOfSearchText)
     {
         if (string.IsNullOrWhiteSpace(newValueOfSearchText))
         {
