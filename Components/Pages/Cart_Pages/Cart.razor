@@ -66,38 +66,41 @@ else
                 <div class="card-header text-success text-center display-6">
                     Pickup Details
                 </div>
-                <div class="card-body">
-                    <form>
+                <EditForm Model="OrderHeader" FormName="CartForm" OnValidSubmit="ProcessOrderCreation">
+                    <DataAnnotationsValidator />
+                    <div class="card-body">
+
                         <div class="form-group">
                             <label>Name</label>
-                            <input type="text" class="form-control" />
+                            <InputText @bind-Value="OrderHeader.Name" type="text" class="form-control" />
+                            <ValidationMessage For="@(() => OrderHeader.Name)" />
                         </div>
                         <div class="form-group">
                             <label>Email</label>
-                            <input type="text" class="form-control" />
+                            <InputText @bind-Value="OrderHeader.Email" type="text" class="form-control" />
+                            <ValidationMessage For="@(() => OrderHeader.Email)" />
                         </div>
                         <div class="form-group">
                             <label>Phone</label>
-                            <input type="text" class="form-control" />
+                            <InputText @bind-Value="OrderHeader.PhoneNumber" type="text" class="form-control" />
+                            <ValidationMessage For="@(() => OrderHeader.PhoneNumber)" />
                         </div>
-
-                    </form>
-                    <div class="card mt-4 bg-light">
-                        <div class="card-body">
-                            <h4>
-                                Grand Total: --$$--
-                            </h4>
-                            <h4>
-                                No. of Items: --COUNT--
-                            </h4>
+                        <div class="card mt-4 bg-light">
+                            <div class="card-body">
+                                <h4>
+                                    Grand Total: @OrderHeader.OrderTotal.ToString("C", CultureInfo.GetCultureInfo("en-us"))
+                                </h4>
+                                <h4>
+                                    No. of Items: @TotalItems
+                                </h4>
+                            </div>
                         </div>
-
                     </div>
-                </div>
+                    <button type="submit" class="btn btn-success m-4">
+                        Looks Good? Place Order!
+                    </button>
+                </EditForm>
 
-                <button class="btn btn-success m-4">
-                    Looks Good? Place Order!
-                </button>
             </div>
         </div>
     </div>
@@ -106,6 +109,9 @@ else
 
     private IEnumerable<ShoppingCart> ShoppingCarts = new List<ShoppingCart>();
     private bool IsProcessing { get; set; } = true;
+    [SupplyParameterFromForm]
+    public OrderHeader OrderHeader { get; set; } = new OrderHeader();
+    private int TotalItems { get; set; } = 0;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -134,5 +140,10 @@ else
         var result = await
         _cartRepository.UpdateCartAsync(user.FindFirst(u => u.Type.Contains("nameidentifier"))?.Value, productId, updateBy);
         await LoadCart();
+    }
+
+    private async Task ProcessOrderCreation()
+    {
+
     }
 }
