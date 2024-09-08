@@ -1,6 +1,7 @@
 ﻿@page "/cart"
 @using Microsoft.AspNetCore.Authorization
 @using System.Globalization
+@using YumBlazor.Utility
 @inject AuthenticationStateProvider _AuthenticationStateProvider
 @inject IShoppingCartRepository _cartRepository
 @attribute [Authorize]
@@ -130,6 +131,7 @@ else
         var user = authState.User;
         OrderHeader.Email = user.FindFirst(u => u.Type.Contains("email"))?.Value;
         OrderHeader.UserId = user.FindFirst(u => u.Type.Contains("nameidentifier"))?.Value;
+        OrderHeader.Status = SD.StatusPending;
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -145,9 +147,9 @@ else
     private async Task LoadCart()
     {
         ShoppingCarts = await _cartRepository.GetAllAsync(OrderHeader.UserId);
-
         OrderHeader.OrderTotal = 0;
         TotalItems = 0;
+
         foreach (var cart in ShoppingCarts)
         {
             OrderHeader.OrderTotal += (Convert.ToDouble(cart.Product.Price) * cart.Count);
