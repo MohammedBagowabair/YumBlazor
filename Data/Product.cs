@@ -15,9 +15,9 @@ namespace YumBlazor.Data
         public decimal Price { get; set; }
         public string? Description { get; set; }
         public string? SpecialTag { get; set; }
-
         public int CategoryId { get; set; }
         [ForeignKey("CategoryId")]
+        [Required]
         public Category Category { get; set; }
         public string? ImageUrl { get; set; }
 

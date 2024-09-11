@@ -12,7 +12,7 @@
 @if (IsProcessing)
 {
     <div class="position-absolute w-100 vh-100 d-flex flex-column align-items-center bg-white justify-content-center">
-        <img src="/images/loading.gif" alt="loading" />
+        <img src="/images/loading.gif" alt="loading" />y
     </div>
 }
 else
@@ -38,6 +38,8 @@ else
                 </li>
                 @foreach (var category in Categories)
                 {
+                  
+                    
                     <li class="nav-item">
                         <span class="nav-link @GetActiveTabClass(category.Id)" href="#" style="cursor: pointer"
                               @onclick="()=>FilterProducts(category.Id)">
@@ -53,9 +55,11 @@ else
                         <div class="card">
                             <div class="mt-3 mb-2 row">
                                 <div class="col-6 px-3">
-                                    @if (string.IsNullOrEmpty(pro.SpecialTag))
+                                    @if (!string.IsNullOrEmpty(pro.SpecialTag))
                                     {
-                                        <i class="bi bi-star btn btn-outline-success disabled">@pro.SpecialTag</i>
+
+                                        <i class="bi bi-star btn btn-outline-success  disabled"> @pro.SpecialTag</i>
+
                                     }
                                 </div>
                                 <div class="col-6 text-end text-danger px-3 h3">
